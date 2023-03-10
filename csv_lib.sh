@@ -10,7 +10,7 @@ _csv_shquote() {
 }
 
 _csv_cell() {
-  RET="$RET $(_csv_shquote "$1")"
+  ROW="$ROW $(_csv_shquote "$1")"
 }
 
 _csv_read() {
@@ -18,7 +18,7 @@ _csv_read() {
 
   IFS= read -r -s line || [ -n "$line" ] || return 1
 
-  RET=         # todo? _csv_begin() ?  - or: while _csv_start; _csv_read; do ...; done ?
+  ROW=         # todo? _csv_begin() ?  - or: while _csv_start; _csv_read; do ...; done ?
 #  [ -z "$line" ] && return  # no cell in completely empty line  # TODO?
 
   while

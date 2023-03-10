@@ -7,10 +7,10 @@ _cell2() {
 }
 
 _csv_read || return 1
-header=$RET
+header=$ROW
 
 while _csv_read; do
-  eval "set -- $RET"
+  eval "set -- $ROW"
   first=1
   for val do
     [ -n "$first" ] && { eval "set -- $header"; first=; } || shift

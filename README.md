@@ -2,7 +2,11 @@
 
 * also works with Bash 3 and ZSH (MacOS)
 
-* `_csv_read` will read from stdin and output to `$RET`, which can be used by `eval "set -- $RET"`.
+* `_csv_read` will read from stdin and output to `$ROW`, which can be used via `eval "set -- $ROW"`.
+
+* RFC 4180 uses solely "CRLF" as line ending; `_csv_read` also supports just "LF".
+
+* Defaults are `_csv_delim=,` and `_csv_quote=\"`.
 
 * Example use in `csv.sh` and `csv_header.sh` (treats first line as header / key)
 
