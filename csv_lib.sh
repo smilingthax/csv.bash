@@ -68,4 +68,16 @@ _csv_read() {
   done
 }
 
+_csv_quote() {
+  local qchar=${_csv_quote:0:1}
+  printf '%s%s%s' "$qchar" "$(printf '%s' "$1" | sed "s/[$qchar]/&&/g")" "$qchar"
+}
+
+_csv_quote_smart() {
+  if [ "${1#*[$'\n'$_csv_delim$_csv_quote]}" != "$1" ]; then
+    _csv_quote "$1"
+  else
+    printf '%s' "$1"
+  fi
+}
 
