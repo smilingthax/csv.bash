@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source csv_lib.sh
+source "$(dirname -- "${BASH_SOURCE[0]:-${(%):-%x}}")/csv_lib.sh"
 
 while _csv_read; do
   eval "set -- $ROW"
