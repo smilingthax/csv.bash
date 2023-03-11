@@ -68,6 +68,8 @@ _csv_read() {
   done
 }
 
+# -- csv output
+
 _csv_quote() {
   local qchar=${_csv_quote:0:1}
   printf '%s%s%s' "$qchar" "$(printf '%s' "$1" | sed "s/[$qchar]/&&/g")" "$qchar"
@@ -80,4 +82,15 @@ _csv_quote_smart() {
     printf '%s' "$1"
   fi
 }
+
+_csv_write_smart() {
+  local val first=1
+  for val do
+    [ -z "$first" ] && printf ',' || first=
+    _csv_quote_smart "$val"
+  done
+  printf '\n'
+}
+
+_csv_write() { (_csv_quote_smart() { _csv_quote "$@"; }; _csv_write_smart "$@"); }
 

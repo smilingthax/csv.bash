@@ -10,9 +10,10 @@
 
 * Example use in `csv.sh` and `csv_header.sh` (treats first line as header / key)
 
-* For generating csv, there is `_csv_quote some_string` (-> `"some_string"`) resp. `_csv_quote_smart` (only quotes where needed).
+* For generating csv, there is `_csv_quote some_string` (-> `"some_string"`) resp. `_csv_quote_smart` (only quotes where needed),
+  as well as `_csv_write "$@"` / `_csv_write_smart`.
 
-TODO? add bash4 version returning an (associative) array?
+TODO? add bash4 version returning an (associative) array? [already possible by overriding `_csv_cell` ...]
 
 Copyright (c) 2023 Tobias Hoffmann
 
