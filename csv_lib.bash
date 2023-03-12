@@ -16,7 +16,8 @@ _csv_cell() {
   ROW="$ROW $(_csv_shquote "$1")"
 }
 
-_csv_read() {
+_csv_read() { # [outfn=_csv_cell]
+  local outfn=${1:-_csv_cell}
   local line next qchar cell ws
 
   IFS= read -r line || [ -n "$line" ] || return 1
@@ -54,7 +55,7 @@ _csv_read() {
         return 3
       fi
       next=${next:$((${#ws}+1))}
-      _csv_cell "$cell"
+      "$outfn" "$cell"
       [ ${#line} -gt ${#ws} ]
     else
       cell=${line%%[$_csv_delim]*}
@@ -63,7 +64,7 @@ _csv_read() {
         return 4
       fi
       next=${line:$((${#cell}+1))}
-      _csv_cell "${cell%$_csv_cr}"
+      "$outfn" "${cell%$_csv_cr}"
       [ ${#line} -gt ${#cell} ]
     fi
   do

@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
-. "$(dirname -- "${BASH_SOURCE[0]:-${(%):-%x}}")/csv_lib.bash"
+. "$(dirname -- "$0")/csv_lib.sh"
 
 _cell2() {
-  printf '%s: %q\n' "$1" "$2"
+  printf '%s: %s\n' "$1" "$(_csv_shquote "$2")"
 }
 
 _csv_read || return 1
