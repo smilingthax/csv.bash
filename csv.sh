@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
-source "$(dirname -- "${BASH_SOURCE[0]:-${(%):-%x}}")/csv_lib.sh"
+. "$(dirname -- "$0")/csv_lib.sh"
 
 while _csv_read; do
   eval "set -- $ROW"
-  for i do printf '_cell: %q\n' "$i"; done
+  for i do printf '_cell: %s\n' "$(_csv_shquote "$i")"; done
   echo
 done
 

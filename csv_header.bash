@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "$(dirname -- "${BASH_SOURCE[0]:-${(%):-%x}}")/csv_lib.sh"
+. "$(dirname -- "${BASH_SOURCE[0]:-${(%):-%x}}")/csv_lib.bash"
 
 _cell2() {
   printf '%s: %q\n' "$1" "$2"

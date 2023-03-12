@@ -1,6 +1,7 @@
-# Bash/Shell CSV library
+# Shell CSV library
 
-* also works with Bash 3 and ZSH (MacOS)
+* `csv_lib.bash` works with Bash 3 and ZSH (MacOS);  
+  `csv_lib.sh` even works with dash / posix (w/ `local`).
 
 * `_csv_read` will read from stdin and output to `$ROW`, which can be used via `eval "set -- $ROW"`.
 
@@ -8,12 +9,12 @@
 
 * Defaults are `_csv_delim=,` and `_csv_quote=\"`.
 
-* Example use in `csv.sh` and `csv_header.sh` (treats first line as header / key)
+* Example use in `csv.sh` / `csv.bash` and `csv_header.bash` (treats first line as header / key).
 
 * For generating csv, there is `_csv_quote some_string` (-> `"some_string"`) resp. `_csv_quote_smart` (only quotes where needed),
   as well as `_csv_write "$@"` / `_csv_write_smart`.
 
-TODO? add bash4 version returning an (associative) array? [already possible by overriding `_csv_cell` ...]
+TODO? add bash4 (+ zsh) version returning an (associative) array? [already possible by overriding `_csv_cell` ...]
 
 Copyright (c) 2023 Tobias Hoffmann
 

@@ -1,13 +1,12 @@
-#!/bin/sh
-# csv_lib.sh posix shell library to parse csv
+#!/bin/bash
+# csv_lib.bash shell library to parse csv
 # (c) 2023 Tobias Hoffmann
 
 _csv_delim=,
 _csv_quote=\"
 
-_csv_cr=$(printf '\r')
-_csv_lf='
-'
+_csv_cr=$'\r'
+_csv_lf=$'\n'
 
 _csv_shquote() {
   printf '%s\n' "$1" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"
@@ -18,7 +17,7 @@ _csv_cell() {
 }
 
 _csv_read() {
-  local line next qchar cell ws tmp
+  local line next qchar cell ws
 
   IFS= read -r line || [ -n "$line" ] || return 1
 
@@ -26,21 +25,18 @@ _csv_read() {
 #  [ -z "$line" ] && return  # no cell in completely empty line  # TODO?
 
   while
-    ws=${line%%[! ]*}
-    next=${line#"$ws"[$_csv_quote]}  # strip begin quote w/ leading whitespace
+    next=${line#"${line%%[! ]*}"[$_csv_quote]}  # strip begin quote w/ leading whitespace
     if [ "$next" != "$line" ]; then
-      tmp=${line%"$next"}
-      qchar=${tmp#"$ws"}
+      qchar=${line:$((${#line}-${#next}-1)):1}
       line=$next
       cell=
       while
         while
           next=${line#*"$qchar"}
-          tmp=${next#"$qchar"}
-          [ ${#tmp} -lt ${#next} ]   # double quotes
+          [ "${next:0:1}" = "$qchar" ]   # double quotes
         do
-          cell="$cell${line%"$next"}"
-          line=$tmp
+          cell="$cell${line:0:$((${#line}-${#next}))}"
+          line=${next:1}
         done
         [ "$next" = "$line" ]   # end of line inside quotes
       do
@@ -50,14 +46,14 @@ _csv_read() {
           return 2
         }
       done
-      cell="$cell${line%"$qchar$next"}"
+      cell="$cell${line:0:$((${#line}-${#next}-1))}"
       line=${next%$_csv_cr}
       ws=${line%%[$_csv_delim]*}
       if [ "${ws#*[! ]}" != "$ws" ]; then
-        echo "Parse error: Expected only whitespace after end-quote, got '$ws'" >&2
+        echo "Parse error: Expected only whitespace after end-quote, got '${ws:0:20}'" >&2
         return 3
       fi
-      next=${line#"$ws"?}
+      next=${next:$((${#ws}+1))}
       _csv_cell "$cell"
       [ ${#line} -gt ${#ws} ]
     else
@@ -66,7 +62,7 @@ _csv_read() {
         echo "Parse error: Spurious quote in unquoted cell: '$cell'" >&2
         return 4
       fi
-      next=${line#"$cell"?}
+      next=${line:$((${#cell}+1))}
       _csv_cell "${cell%$_csv_cr}"
       [ ${#line} -gt ${#cell} ]
     fi
@@ -78,7 +74,7 @@ _csv_read() {
 # -- csv output
 
 _csv_quote() {
-  local qchar=${_csv_quote%"${_csv_quote#?}"}
+  local qchar=${_csv_quote:0:1}
   printf '%s%s%s' "$qchar" "$(printf '%s' "$1" | sed "s/[$qchar]/&&/g")" "$qchar"
 }
 
